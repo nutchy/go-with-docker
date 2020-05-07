@@ -36,6 +36,7 @@ EXPOSE 3000
 FROM scratch
 
 COPY --from=builder /dist/main /
+COPY ./database/data.json /database/data.json
 
 # Command to run
 ENTRYPOINT ["/main"]
