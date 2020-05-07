@@ -1,7 +1,7 @@
 # This image runs the alpine Linux distribution which is small in size 
 # and has Golang already installed which is perfect for our use case.
 # There are tons of publicly available Docker image, have a look at https://hub.docker.com/_/golang
-FROM golang:alpine
+FROM golang:alpine AS builder
 
 # Set necessary environmet variables needed for our image
 ENV GO111MODULE=on \
@@ -32,5 +32,10 @@ RUN cp /build/main .
 # Export necessary port
 EXPOSE 3000
 
-# Command to run when starting the container
-CMD ["/dist/main"]
+# Build a small image
+FROM scratch
+
+COPY --from=builder /dist/main /
+
+# Command to run
+ENTRYPOINT ["/main"]
